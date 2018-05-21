@@ -10,7 +10,11 @@ const app = express();
 app.use(express.static('public'));
 
 app.get('/api/notes',(req, res) => {
-  res.json(data);
+  let newData = data;
+  if (req.query.searchTerm) {
+    newData = data.filter(item => (item.title.toLowerCase().includes(req.query.searchTerm.toLowerCase()) || item.content.toLowerCase().includes(req.query.searchTerm.toLowerCase())));
+  }
+  res.json(newData);
 });
 
 app.get('/api/notes/:id',(req, res) => {
