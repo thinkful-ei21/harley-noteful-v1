@@ -12,7 +12,8 @@ app.use(express.static('public'));
 app.get('/api/notes',(req, res) => {
   let newData = data;
   if (req.query.searchTerm) {
-    newData = data.filter(item => (item.title.toLowerCase().includes(req.query.searchTerm.toLowerCase()) || item.content.toLowerCase().includes(req.query.searchTerm.toLowerCase())));
+    let search = req.query.searchTerm.toLowerCase();
+    newData = data.filter(item => (item.title.toLowerCase().includes(search) || item.content.toLowerCase().includes(search)));
   }
   res.json(newData);
 });
