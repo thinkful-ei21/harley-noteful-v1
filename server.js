@@ -17,13 +17,15 @@ app.use(requestLogger);
 
 app.use(express.static('public'));
 
-app.get('/api/notes',(req, res) => {
-  let newData = data;
-  if (req.query.searchTerm) {
-    let search = req.query.searchTerm.toLowerCase();
-    newData = data.filter(item => (item.title.toLowerCase().includes(search) || item.content.toLowerCase().includes(search)));
-  }
-  res.json(newData);
+app.get('/api/notes',(req, res, next) => {
+  const { searchTerm } = req.query;
+
+  notes.filter(searchTerm, (err, list) => {
+    if (err) {
+      return next(err); // goes to error handler
+    }
+    res.json(list); // responds with filtered array
+  });
 });
 
 app.get('/api/notes/:id',(req, res) => {
