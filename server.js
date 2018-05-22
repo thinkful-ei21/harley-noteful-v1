@@ -8,7 +8,11 @@ const app = express();
 
 const { PORT } = require('./config');
 
+const { requestLogger } = require('./middleware/logger');
+
 // ADD STATIC SERVER HERE
+app.use(requestLogger);
+
 app.use(express.static('public'));
 
 app.get('/api/notes',(req, res) => {
