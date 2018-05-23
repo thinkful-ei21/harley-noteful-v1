@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const morgan = require('morgan');
 
 const data = require('./db/notes');
 const simDB = require('./db/simDB');
@@ -10,10 +11,8 @@ const app = express();
 
 const { PORT } = require('./config');
 
-const { requestLogger } = require('./middleware/logger');
-
 // ADD STATIC SERVER HERE
-app.use(requestLogger);
+app.use(morgan('dev'));
 
 app.use(express.static('public'));
 
