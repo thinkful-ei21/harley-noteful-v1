@@ -28,6 +28,17 @@ router.get('/notes/:id',(req, res, next) => {
     res.json(item);
   });
 });
+
+router.delete('/notes/:id',(req, res, next) => {
+  const { id } = req.params;
+    
+  notes.delete(id, err => {
+    if (err) {
+      return next(err);
+    }
+    res.status(204).json();
+  });
+});
   
 router.put('/notes/:id', (req, res, next) => {
   const id = req.params.id;
