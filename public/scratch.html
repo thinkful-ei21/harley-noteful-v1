@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Temporary Scratch File</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <script src="scripts/api.js"></script>
+    <script language="javascript">
+         // test get all with bad number
+         api.search({})
+            .then(response => {
+            console.log(response)
+            }); 
+        // test get details
+        api.remove(1000)
+            .then(response => {
+            console.log(response)
+            });
+  
+        // test get all with bad number
+        api.search({})
+            .then(response => {
+            console.log(response)
+            }); 
+    </script>
+</head>
+<body>
+       
+</body>
+</html>
+
