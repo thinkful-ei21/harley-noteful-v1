@@ -94,5 +94,38 @@ describe('API tests', function () {
         expect(res.body.length).to.equal(0);
       });
   });
+
+  it('POST request "/api/notes" should add item with provided data', function () {
+    const newItem = { title: 'new item', content: 'new item'};
+    return chai.request(app)
+      .post('/api/notes')
+      .send(newItem)
+      .then(function (res) {
+        expect(res).to.exist;
+        expect(res).to.have.status(201);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('id', 'title', 'content');
+        expect(res.body).to.not.equal(null);
+        expect(res.body).to.deep.equal(Object.assign(newItem, {id: res.body.id}));
+        expect(res).to.have.header('location');
+      });
     
+  });
+
+  it('POST request "/api/notes" should return error if title field missing', function () {
+    const newItem = { title: null, content: 'new item'};
+    return chai.request(app)
+      .post('/api/notes')
+      .send(newItem)
+      .then(function (res) {
+        expect(res).to.exist;
+        expect(res).to.have.status(400);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body.message).to.equal('Missing `title` in request body');
+      });
+    
+  });
+
 });
