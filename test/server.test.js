@@ -39,7 +39,7 @@ describe('404 handler', function () {
   it('should respond with 404 when given a bad path', function () {
     return chai.request(app)
       .get('/DOES/NOT/EXIST')
-      .then(res => {
+      .then(function(res) {
         expect(res).to.have.status(404);
       });
   });
@@ -180,6 +180,32 @@ describe('API tests', function () {
       .put('/api/notes/DOESNOTEXIST')
       .then(function(res) {
         expect(res).to.have.status(404);
+      });
+  });
+
+  it('should delete items on delete', function() {
+    return chai.request(app)
+      .get('/api/notes')
+      .then(function(res) {
+        const id = res.body[0].id;
+        expect(res.body.length).to.equal(11);
+        return chai.request(app)
+          .delete(`/api/notes/${id}`)
+          .then(function(delRes){
+            expect(delRes).to.exist;
+            expect(delRes).to.have.status(204);
+          });
+      });
+  });
+
+  it('it should have one less item after delete', function () {
+    return chai.request(app)
+      .get('/api/notes')
+      .then(function (res) {
+        expect(res).to.exist;
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body.length).to.equal(10);
       });
   });
 
