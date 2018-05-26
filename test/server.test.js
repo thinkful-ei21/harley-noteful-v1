@@ -128,4 +128,29 @@ describe('API tests', function () {
     
   });
 
+  it('GET request "/api/notes/:id" should return note with given id', function () {
+    return chai.request(app)
+      .get('/api/notes')
+      .then(function (res) {
+        const id = res.body[0].id;
+        return chai.request(app)
+          .get(`/api/notes/${id}`)
+          .then(function(getRes) {
+            expect(getRes).to.exist;
+            expect(getRes).to.have.status(200);
+            expect(getRes.body).to.be.a('object');
+            expect(getRes.body).to.have.all.keys('id', 'title', 'content');
+            expect(getRes.body.id).to.equal(id);
+          });
+      });
+  });
+
+  it('should respond with 404 when given a bad id', function () {
+    return chai.request(app)
+      .get('/api/notes/DOESNOTEXIST')
+      .then(function(res) {
+        expect(res).to.have.status(404);
+      });
+  });
+
 });
