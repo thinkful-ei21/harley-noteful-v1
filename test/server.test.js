@@ -45,3 +45,54 @@ describe('404 handler', function () {
   });
   
 });
+
+describe('API tests', function () {
+
+  it('GET request "/api/notes" should return all notes', function () {
+    return chai.request(app)
+      .get('/api/notes')
+      .then(function (res) {
+        expect(res).to.exist;
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body.length).to.equal(10);
+        res.body.forEach(function(item) {
+          expect(item).to.be.a('object');
+          expect(item).to.have.all.keys('id', 'title', 'content');
+        });
+      });
+  });
+
+  it('GET request "/api/notes" with a query should return all notes containing query', function () {
+    const validTerm = 'cat';
+    
+    return chai.request(app)
+      .get('/api/notes')
+      .query({searchTerm : validTerm})
+      .then(function (res) {
+        expect(res).to.exist;
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        res.body.forEach(function(item) {
+          expect(item).to.be.a('object');
+          expect(item).to.have.all.keys('id', 'title', 'content');
+          expect(item.title).to.contain(validTerm);
+        });
+      });
+  });
+
+  it('GET request "/api/notes" with a bad query should return an empty array', function () {
+    const invalidTerm = 'aaaaaaaaaaaa';
+    
+    return chai.request(app)
+      .get('/api/notes')
+      .query({searchTerm : invalidTerm})
+      .then(function (res) {
+        expect(res).to.exist;
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body.length).to.equal(0);
+      });
+  });
+    
+});
