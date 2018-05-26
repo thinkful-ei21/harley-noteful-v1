@@ -153,4 +153,34 @@ describe('API tests', function () {
       });
   });
 
+  it('PUT request "/api/notes/:id" should update note with given id', function () {
+    return chai.request(app)
+      .get('/api/notes')
+      .then(function (res) {
+        const id = res.body[0].id;
+        const newContent = { title: 'new item', content: 'new item'};
+        return chai.request(app)
+          .put(`/api/notes/${id}`)
+          .send(newContent)
+          .then(function(getRes) {
+            expect(getRes).to.exist;
+            expect(getRes).to.have.status(200);
+            expect(getRes.body).to.be.a('object');
+            expect(getRes.body).to.have.all.keys('id', 'title', 'content');
+            expect(getRes.body.id).to.equal(id);
+            expect(getRes.body.title).to.equal('new item');
+            expect(getRes.body.content).to.equal('new item');
+            expect(Object.keys(getRes.body).length).to.equal(3);
+          });
+      });
+  });
+
+  it('should respond with 404 when given an invalid id', function () {
+    return chai.request(app)
+      .put('/api/notes/DOESNOTEXIST')
+      .then(function(res) {
+        expect(res).to.have.status(404);
+      });
+  });
+
 });
